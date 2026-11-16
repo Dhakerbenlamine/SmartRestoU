@@ -25,4 +25,28 @@ final sampleMenuItems = List<MenuItem>.unmodifiable([
     type: 'Menu de la semaine',
     date: DateTime.now().add(const Duration(days: 2)),
   ),
+  MenuItem(
+    id: 'menu-4',
+    name: 'Couscous aux légumes',
+    description: 'Semoule et légumes mijotés aux épices douces.',
+    diet: 'Vegan',
+    type: 'Menu du jour',
+    date: DateTime.now().add(const Duration(days: 3)),
+  ),
+  MenuItem(
+    id: 'menu-5',
+    name: 'Poulet rôti aux herbes',
+    description: 'Accompagné de pommes de terre et de salade verte.',
+    diet: 'Standard',
+    type: 'Menu de la semaine',
+    date: DateTime.now().add(const Duration(days: 4)),
+  ),
+  MenuItem(
+    id: 'menu-6',
+    name: 'Salade de quinoa et pois chiches',
+    description: 'Une salade fraîche, complète et naturellement sans gluten.',
+    diet: 'Sans gluten',
+    type: 'Menu du jour',
+    date: DateTime.now().add(const Duration(days: 5)),
+  ),
 ]);

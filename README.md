@@ -39,7 +39,7 @@ menus et des statistiques.
 
 # Repartion du travail 
 
-Mohamed Rayen cherni : Remplacement du squelette Rihla par SmartRestoU ; filtres et détails des menus ; ajout de six menus de démonstration.
+Mohamed Rayen cherni : Preparer Structure du projet ; filtres et détails des menus ; ajout de six menus de démonstration.
 
 Dhaker ben Lamine : Écran de réservation ; tableau de bord ; écran d’historique et synchronisation avec les autres écrans.
 
@@ -47,4 +47,5 @@ Dhaker ben Lamine : Écran de réservation ; tableau de bord ; écran d’histor
 # Journal IA 
 
 Dhaker ben lamine : https://claude.ai/share/98009013-8343-4ed5-b38c-d5bfd608265a
+
 Mohamed Rayen Cherni : https://chatgpt.com/share/6afb81aa-3bac-83ea-a320-e1af30979d49

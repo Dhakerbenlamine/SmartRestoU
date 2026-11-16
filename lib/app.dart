@@ -27,29 +27,31 @@ class AppShell extends StatefulWidget {
 class _AppShellState extends State<AppShell> {
   int _selectedIndex = 0;
 
-  static const _pages = <Widget>[
-    HomeScreen(),
-    PlaceholderScreen(
-      title: 'Réserver une table',
-      message: 'Choisissez votre repas et réservez votre place.',
-      icon: Icons.event_seat_outlined,
-    ),
-    PlaceholderScreen(
-      title: 'Mon espace',
-      message: 'Retrouvez ici vos réservations et notifications.',
-      icon: Icons.person_outline,
-    ),
-    PlaceholderScreen(
-      title: 'Mon historique',
-      message: 'Vos repas passés et vos avis apparaîtront ici.',
-      icon: Icons.history,
-    ),
-  ];
+  Widget get _currentPage {
+    return switch (_selectedIndex) {
+      0 => HomeScreen(onReserve: () => setState(() => _selectedIndex = 1)),
+      1 => const PlaceholderScreen(
+        title: 'Réserver une table',
+        message: 'Choisissez votre repas et réservez votre place.',
+        icon: Icons.event_seat_outlined,
+      ),
+      2 => const PlaceholderScreen(
+        title: 'Mon espace',
+        message: 'Retrouvez ici vos réservations et notifications.',
+        icon: Icons.person_outline,
+      ),
+      _ => const PlaceholderScreen(
+        title: 'Mon historique',
+        message: 'Vos repas passés et vos avis apparaîtront ici.',
+        icon: Icons.history,
+      ),
+    };
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(child: _pages[_selectedIndex]),
+      body: SafeArea(child: _currentPage),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _selectedIndex,
         onDestinationSelected: (index) {

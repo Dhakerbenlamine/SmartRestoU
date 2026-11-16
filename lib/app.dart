@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smart_restou/screens/home_screen.dart';
 import 'package:smart_restou/screens/placeholder_screen.dart';
+import 'package:smart_restou/screens/reservation_screen.dart';
 import 'package:smart_restou/theme/app_theme.dart';
 
 class SmartRestoApp extends StatelessWidget {
@@ -30,10 +31,8 @@ class _AppShellState extends State<AppShell> {
   Widget get _currentPage {
     return switch (_selectedIndex) {
       0 => HomeScreen(onReserve: () => setState(() => _selectedIndex = 1)),
-      1 => const PlaceholderScreen(
-        title: 'Réserver une table',
-        message: 'Choisissez votre repas et réservez votre place.',
-        icon: Icons.event_seat_outlined,
+      1 => ReservationScreen(
+        onCancel: () => setState(() => _selectedIndex = 0),
       ),
       2 => const PlaceholderScreen(
         title: 'Mon espace',
@@ -64,6 +63,7 @@ class _AppShellState extends State<AppShell> {
             label: 'Menus',
           ),
           NavigationDestination(
+            key: Key('nav-reservation'),
             icon: Icon(Icons.event_seat_outlined),
             selectedIcon: Icon(Icons.event_seat),
             label: 'Réserver',

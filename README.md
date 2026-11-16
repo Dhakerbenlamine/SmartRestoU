@@ -13,8 +13,10 @@ flutter run
 ```
 
 Le jalon 1 pose la structure Flutter, le thème commun, la navigation principale
-et un premier catalogue de menus de démonstration. Les données sont locales et
-les autres onglets sont encore en cours de réalisation.
+et un premier catalogue de menus de démonstration. L'écran de réservation
+permet de choisir une date, une heure et jusqu'à 10 convives. Les données et la
+confirmation restent en mode démonstration : aucun ticket QR ni e-mail n'est
+réellement envoyé.
 
 ## Vérification
 

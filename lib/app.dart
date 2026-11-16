@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smart_restou/screens/dashboard_screen.dart';
 import 'package:smart_restou/screens/home_screen.dart';
 import 'package:smart_restou/screens/placeholder_screen.dart';
 import 'package:smart_restou/screens/reservation_screen.dart';
@@ -34,10 +35,9 @@ class _AppShellState extends State<AppShell> {
       1 => ReservationScreen(
         onCancel: () => setState(() => _selectedIndex = 0),
       ),
-      2 => const PlaceholderScreen(
-        title: 'Mon espace',
-        message: 'Retrouvez ici vos réservations et notifications.',
-        icon: Icons.person_outline,
+      2 => DashboardScreen(
+        onReserve: () => setState(() => _selectedIndex = 1),
+        onHistory: () => setState(() => _selectedIndex = 3),
       ),
       _ => const PlaceholderScreen(
         title: 'Mon historique',
@@ -69,6 +69,7 @@ class _AppShellState extends State<AppShell> {
             label: 'Réserver',
           ),
           NavigationDestination(
+            key: Key('nav-dashboard'),
             icon: Icon(Icons.person_outline),
             selectedIcon: Icon(Icons.person),
             label: 'Mon espace',

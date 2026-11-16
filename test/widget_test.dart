@@ -59,6 +59,27 @@ void main() {
     expect(find.text('Menus du restaurant'), findsOneWidget);
   });
 
+  testWidgets('dashboard uses generic empty states and opens reservations', (
+    tester,
+  ) async {
+    await tester.pumpWidget(const SmartRestoApp());
+
+    await tester.tap(find.byKey(const Key('nav-dashboard')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Mon espace'), findsNWidgets(2));
+    expect(find.text('Mes notifications'), findsOneWidget);
+    expect(find.text('Aucune notification pour le moment.'), findsOneWidget);
+    expect(find.text('Mes réservations'), findsOneWidget);
+    expect(find.text('Aucune réservation enregistrée.'), findsOneWidget);
+    expect(find.text('Etudiant Test'), findsNothing);
+    expect(find.text('Bonjour, Etudiant Test'), findsNothing);
+
+    await tester.tap(find.byKey(const Key('dashboard-reserve')));
+    await tester.pumpAndSettle();
+    expect(find.text('Réserver une Table'), findsOneWidget);
+  });
+
   testWidgets('filters can be reset and empty results are explained', (
     tester,
   ) async {

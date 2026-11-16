@@ -17,6 +17,9 @@ et un premier catalogue de menus de démonstration. L'écran de réservation
 permet de choisir une date, une heure et jusqu'à 10 convives. Les données et la
 confirmation restent en mode démonstration : aucun ticket QR ni e-mail n'est
 réellement envoyé.
+Le tableau de bord étudiant reprend les sections notifications et réservations
+du prototype, sans nom ni données personnelles. Il affiche des états vides
+jusqu'à l'intégration de l'authentification et du backend.
 
 ## Vérification
 

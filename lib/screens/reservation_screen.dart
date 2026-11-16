@@ -242,7 +242,7 @@ class _ReservationHeader extends StatelessWidget {
         CircleAvatar(
           backgroundColor: primary.withValues(alpha: 0.1),
           foregroundColor: primary,
-          child: const Text('E', style: TextStyle(fontWeight: FontWeight.w700)),
+          child: const Icon(Icons.person_outline),
         ),
       ],
     );

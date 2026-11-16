@@ -5,37 +5,46 @@ permettra aux étudiants de consulter les menus, réserver un repas et suivre
 leurs réservations. Un espace d'administration est prévu pour la gestion des
 menus et des statistiques.
 
-## Démarrer l'application
+# Les Captures d'ecrans 
 
-```bash
-flutter pub get
-flutter run
-```
+<img width="702" height="1600" alt="WhatsApp Image 2026-11-16 at 9 18 24 PM (1)" src="https://github.com/user-attachments/assets/c9ab0d3f-6b87-49af-a958-37fb5842bbc4" />
 
-Le jalon 1 pose la structure Flutter, le thème commun, la navigation principale
-et un premier catalogue de menus de démonstration. L'écran de réservation
-permet de choisir une date, une heure et jusqu'à 10 convives. Les données et la
-confirmation restent en mode démonstration : aucun ticket QR ni e-mail n'est
-réellement envoyé.
-Le tableau de bord étudiant reprend les sections notifications et réservations
-du prototype, sans nom ni données personnelles. Il affiche des états vides
-jusqu'à l'intégration de l'authentification et du backend.
-L'écran historique suit le même principe : les réservations passées et repas
-consommés affichent un état vide jusqu'à ce que ces données soient disponibles.
-Après confirmation, une réservation est partagée entre le tableau de bord et
-l'historique pendant la session courante. Elle est conservée en mémoire locale
-uniquement et disparaît au redémarrage de l'application ; aucun backend ni
-service de notification n'est encore connecté.
 
-## Vérification
+<img width="702" height="1600" alt="WhatsApp Image 2026-11-16 at 9 18 24 PM (2)" src="https://github.com/user-attachments/assets/79be7207-aba3-4cec-b300-4cc3a47800e5" />
 
-```bash
-flutter analyze
-flutter test
-```
 
-## Suite du projet
+<img width="702" height="1600" alt="WhatsApp Image 2026-11-16 at 9 18 24 PM (3)" src="https://github.com/user-attachments/assets/cb339759-2792-4cc8-bd96-0064a5628101" />
 
-Les étapes suivantes couvriront le parcours de réservation, l'espace étudiant,
-l'historique et les avis, puis les écrans d'administration et les statistiques.
-Les intégrations d'authentification et de backend restent à définir.
+
+<img width="720" height="1640" alt="WhatsApp Image 2026-11-16 at 9 18 23 PM (4)" src="https://github.com/user-attachments/assets/ec6b98d4-fa3a-4898-86e3-7203720eeba0" />
+
+
+<img width="702" height="1600" alt="WhatsApp Image 2026-11-16 at 9 18 23 PM (5)" src="https://github.com/user-attachments/assets/0a96ddf4-ed5f-464f-acd4-0e321d02fd9e" />
+
+
+<img width="702" height="1600" alt="WhatsApp Image 2026-11-16 at 9 18 23 PM (6)" src="https://github.com/user-attachments/assets/608e76bd-14f9-43a1-ac86-48275903251e" />
+
+
+<img width="702" height="1600" alt="WhatsApp Image 2026-11-16 at 9 18 24 PM" src="https://github.com/user-attachments/assets/b1c64e81-ee7e-4791-987a-59c8faf10072" />
+
+# Le schéma de navigation 
+  Menus → Filtrer par régime ou type → Liste des menus
+  Menus → Détails d’un menu → Réserver une table
+  Menus → Réserver → Formulaire de réservation
+  Formulaire de réservation → Annuler → Menus
+  Formulaire de réservation → Choisir date, heure et convives → Récapitulatif → Confirmer → Tableau de bord
+  Tableau de bord → Réserver une table → Formulaire de réservation
+  Tableau de bord → Voir tout → Historique
+  Historique → Retour au tableau de bord → Tableau de bord
+
+# Repartion du travail 
+
+Mohamed Rayen cherni : Remplacement du squelette Rihla par SmartRestoU ; filtres et détails des menus ; ajout de six menus de démonstration.
+
+Dhaker ben Lamine : Écran de réservation ; tableau de bord ; écran d’historique et synchronisation avec les autres écrans.
+
+
+# Journal IA 
+
+Dhaker ben lamine : https://claude.ai/share/98009013-8343-4ed5-b38c-d5bfd608265a
+Mohamed Rayen Cherni : https://chatgpt.com/share/6afb81aa-3bac-83ea-a320-e1af30979d49

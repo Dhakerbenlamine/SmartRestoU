@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:smart_restou/models/reservation.dart';
 
 class ReservationScreen extends StatefulWidget {
-  const ReservationScreen({super.key, required this.onCancel});
+  const ReservationScreen({
+    super.key,
+    required this.onCancel,
+    required this.onReservationConfirmed,
+  });
 
   final VoidCallback onCancel;
+  final ValueChanged<Reservation> onReservationConfirmed;
 
   @override
   State<ReservationScreen> createState() => _ReservationScreenState();
@@ -64,7 +70,11 @@ class _ReservationScreenState extends State<ReservationScreen> {
       return;
     }
 
-    await showDialog<void>(
+    final reservation = Reservation(
+      dateTime: reservationDateTime,
+      guestCount: _guestCount,
+    );
+    final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
         icon: Icon(
@@ -77,23 +87,35 @@ class _ReservationScreenState extends State<ReservationScreen> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Resto U Central · $_guestCount personne(s)'),
+            Text(
+              '${reservation.restaurantName} · '
+              '${reservation.guestCount} personne(s)',
+            ),
             const SizedBox(height: 8),
             Text('${_formatDate(date)} à ${time.format(context)}'),
             const SizedBox(height: 16),
             const Text(
-              'Mode démonstration : aucun ticket QR ni e-mail ne sera envoyé.',
+              'Cette réservation sera enregistrée sur cet appareil. '
+              'Aucun ticket QR ni e-mail ne sera envoyé en mode démonstration.',
             ),
           ],
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Fermer'),
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Modifier'),
+          ),
+          FilledButton(
+            key: const Key('confirm-reservation'),
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Confirmer'),
           ),
         ],
       ),
     );
+    if (confirmed == true && mounted) {
+      widget.onReservationConfirmed(reservation);
+    }
   }
 
   String _formatDate(DateTime date) =>
@@ -119,9 +141,8 @@ class _ReservationScreenState extends State<ReservationScreen> {
         const SizedBox(height: 8),
         Text(
           'Choisissez une date et le nombre de convives pour votre repas.',
-          style: Theme.of(
-            context,
-          ).textTheme.bodyLarge?.copyWith(color: const Color(0xFF8992B3)),
+          style: Theme.of(context).textTheme.bodyLarge
+              ?.copyWith(color: const Color(0xFF8992B3)),
         ),
         const SizedBox(height: 20),
         const _RestaurantCard(),
@@ -281,9 +302,8 @@ class _RestaurantCard extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     'Capacité maximale : 500 personnes',
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: const Color(0xFF8992B3),
-                    ),
+                    style: Theme.of(context).textTheme.bodyLarge
+                        ?.copyWith(color: const Color(0xFF8992B3)),
                   ),
                 ],
               ),

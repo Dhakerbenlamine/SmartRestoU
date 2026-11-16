@@ -20,6 +20,12 @@ réellement envoyé.
 Le tableau de bord étudiant reprend les sections notifications et réservations
 du prototype, sans nom ni données personnelles. Il affiche des états vides
 jusqu'à l'intégration de l'authentification et du backend.
+L'écran historique suit le même principe : les réservations passées et repas
+consommés affichent un état vide jusqu'à ce que ces données soient disponibles.
+Après confirmation, une réservation est partagée entre le tableau de bord et
+l'historique pendant la session courante. Elle est conservée en mémoire locale
+uniquement et disparaît au redémarrage de l'application ; aucun backend ni
+service de notification n'est encore connecté.
 
 ## Vérification
 

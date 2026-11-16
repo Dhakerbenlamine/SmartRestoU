@@ -39,10 +39,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Réserver une Table'), findsOneWidget);
 
-    await tester.scrollUntilVisible(
-      find.text('Confirmer la Réservation'),
-      200,
-    );
+    await tester.scrollUntilVisible(find.text('Confirmer la Réservation'), 200);
     await tester.tap(find.text('Confirmer la Réservation'));
     await tester.pumpAndSettle();
     expect(
@@ -78,6 +75,80 @@ void main() {
     await tester.tap(find.byKey(const Key('dashboard-reserve')));
     await tester.pumpAndSettle();
     expect(find.text('Réserver une Table'), findsOneWidget);
+  });
+
+  testWidgets('history shows empty states and returns to dashboard', (
+    tester,
+  ) async {
+    await tester.pumpWidget(const SmartRestoApp());
+
+    await tester.tap(find.byKey(const Key('nav-history')));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Mon Historique'), findsOneWidget);
+    expect(find.text('Mes Réservations'), findsOneWidget);
+    expect(find.text('Aucune réservation enregistrée.'), findsOneWidget);
+    expect(find.text('Repas Consommés'), findsOneWidget);
+    expect(
+      find.textContaining('Aucun repas consommé enregistré.'),
+      findsOneWidget,
+    );
+    expect(find.text('Etudiant Test'), findsNothing);
+
+    await tester.tap(find.byKey(const Key('history-dashboard')));
+    await tester.pumpAndSettle();
+    expect(
+      find.text('Retrouvez ici vos réservations et notifications.'),
+      findsOneWidget,
+    );
+  });
+
+  testWidgets('confirmed reservation appears on dashboard and history', (
+    tester,
+  ) async {
+    await tester.pumpWidget(const SmartRestoApp());
+
+    await tester.tap(find.byKey(const Key('nav-reservation')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('reservation-date-time')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('Next month'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('1').last);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('OK'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('OK'));
+    await tester.pumpAndSettle();
+
+    await tester.drag(find.byType(ListView), const Offset(0, -180));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('guest-count')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('2').last);
+    await tester.pumpAndSettle();
+
+    await tester.scrollUntilVisible(find.text('Confirmer la Réservation'), 200);
+    await tester.tap(find.text('Confirmer la Réservation'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('confirm-reservation')));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const Key('nav-dashboard')), findsOneWidget);
+    expect(find.text('Confirmation de réservation'), findsOneWidget);
+    expect(find.text('Resto U Central'), findsOneWidget);
+    expect(find.textContaining('2 personne(s)'), findsNWidgets(2));
+    expect(find.text('À VENIR'), findsOneWidget);
+
+    await tester.tap(find.byKey(const Key('nav-history')));
+    await tester.pumpAndSettle();
+    expect(find.text('Resto U Central'), findsOneWidget);
+    expect(find.textContaining('2 personne(s)'), findsOneWidget);
+    expect(find.text('À VENIR'), findsOneWidget);
+    expect(
+      find.textContaining('Aucun repas consommé enregistré.'),
+      findsOneWidget,
+    );
   });
 
   testWidgets('filters can be reset and empty results are explained', (

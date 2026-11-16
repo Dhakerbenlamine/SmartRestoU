@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:smart_restou/models/reservation.dart';
 
 class DashboardScreen extends StatelessWidget {
-  const DashboardScreen({super.key, required this.onReserve, this.onHistory});
+  const DashboardScreen({
+    super.key,
+    required this.onReserve,
+    this.onHistory,
+    this.reservations = const [],
+  });
 
   final VoidCallback onReserve;
   final VoidCallback? onHistory;
+  final List<Reservation> reservations;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final primary = theme.colorScheme.primary;
+    final sortedReservations = [...reservations]
+      ..sort((a, b) => a.dateTime.compareTo(b.dateTime));
 
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 20, 20, 28),
@@ -57,11 +66,18 @@ class DashboardScreen extends StatelessWidget {
         _DashboardSection(
           title: 'Mes notifications',
           icon: Icons.notifications_none_outlined,
-          trailing: _CountBadge(color: primary, count: 0),
-          child: const _EmptySectionMessage(
-            icon: Icons.notifications_off_outlined,
-            message: 'Aucune notification pour le moment.',
-          ),
+          trailing: _CountBadge(color: primary, count: reservations.length),
+          child: reservations.isEmpty
+              ? const _EmptySectionMessage(
+                  icon: Icons.notifications_off_outlined,
+                  message: 'Aucune notification pour le moment.',
+                )
+              : Column(
+                  children: [
+                    for (final reservation in sortedReservations.reversed)
+                      _NotificationRow(reservation: reservation),
+                  ],
+                ),
         ),
         const SizedBox(height: 16),
         _DashboardSection(
@@ -71,15 +87,91 @@ class DashboardScreen extends StatelessWidget {
             onPressed: onHistory,
             child: const Text('Voir tout'),
           ),
-          child: const _EmptySectionMessage(
-            icon: Icons.event_busy_outlined,
-            message: 'Aucune réservation enregistrée.',
-          ),
+          child: reservations.isEmpty
+              ? const _EmptySectionMessage(
+                  icon: Icons.event_busy_outlined,
+                  message: 'Aucune réservation enregistrée.',
+                )
+              : Column(
+                  children: [
+                    for (final reservation in sortedReservations)
+                      _ReservationRow(reservation: reservation),
+                  ],
+                ),
         ),
       ],
     );
   }
 }
+
+class _NotificationRow extends StatelessWidget {
+  const _NotificationRow({required this.reservation});
+
+  final Reservation reservation;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      contentPadding: EdgeInsets.zero,
+      leading: const CircleAvatar(
+        child: Icon(Icons.notifications_none_outlined),
+      ),
+      title: const Text('Confirmation de réservation'),
+      subtitle: Text(
+        '${_formatDateTime(reservation.dateTime)} · '
+        '${reservation.guestCount} personne(s)',
+      ),
+    );
+  }
+}
+
+class _ReservationRow extends StatelessWidget {
+  const _ReservationRow({required this.reservation});
+
+  final Reservation reservation;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      contentPadding: EdgeInsets.zero,
+      title: Text(reservation.restaurantName),
+      subtitle: Text(
+        '${_formatDateTime(reservation.dateTime)} · '
+        '${reservation.guestCount} personne(s)',
+      ),
+      trailing: _ReservationStatus(isPast: reservation.isPast),
+    );
+  }
+}
+
+class _ReservationStatus extends StatelessWidget {
+  const _ReservationStatus({required this.isPast});
+
+  final bool isPast;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = isPast ? const Color(0xFF8992B3) : const Color(0xFF168A49);
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.12),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Text(
+        isPast ? 'PASSÉE' : 'À VENIR',
+        style: TextStyle(color: color, fontWeight: FontWeight.w700),
+      ),
+    );
+  }
+}
+
+String _formatDateTime(DateTime dateTime) =>
+    '${dateTime.day.toString().padLeft(2, '0')}/'
+    '${dateTime.month.toString().padLeft(2, '0')}/'
+    '${dateTime.year} à '
+    '${dateTime.hour.toString().padLeft(2, '0')}:'
+    '${dateTime.minute.toString().padLeft(2, '0')}';
 
 class _DashboardSection extends StatelessWidget {
   const _DashboardSection({

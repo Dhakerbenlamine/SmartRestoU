@@ -6,11 +6,13 @@ class DashboardScreen extends StatelessWidget {
     super.key,
     required this.onReserve,
     this.onHistory,
+    this.onLogout,
     this.reservations = const [],
   });
 
   final VoidCallback onReserve;
   final VoidCallback? onHistory;
+  final VoidCallback? onLogout;
   final List<Reservation> reservations;
 
   @override
@@ -36,11 +38,28 @@ class DashboardScreen extends StatelessWidget {
             const SizedBox(width: 12),
             Text('SmartRestoU', style: theme.textTheme.titleLarge),
             const Spacer(),
-            CircleAvatar(
-              backgroundColor: primary.withValues(alpha: 0.1),
-              foregroundColor: primary,
-              child: const Icon(Icons.person_outline),
-            ),
+            if (onLogout == null)
+              CircleAvatar(
+                backgroundColor: primary.withValues(alpha: 0.1),
+                foregroundColor: primary,
+                child: const Icon(Icons.person_outline),
+              )
+            else
+              PopupMenuButton<String>(
+                onSelected: (_) => onLogout!.call(),
+                itemBuilder: (context) => const [
+                  PopupMenuItem(
+                    key: Key('logout'),
+                    value: 'logout',
+                    child: Text('Se déconnecter'),
+                  ),
+                ],
+                icon: CircleAvatar(
+                  backgroundColor: primary.withValues(alpha: 0.1),
+                  foregroundColor: primary,
+                  child: const Icon(Icons.person_outline),
+                ),
+              ),
           ],
         ),
         const SizedBox(height: 28),

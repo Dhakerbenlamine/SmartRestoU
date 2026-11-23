@@ -5,51 +5,10 @@ permettra aux étudiants de consulter les menus, réserver un repas et suivre
 leurs réservations. Un espace d'administration est prévu pour la gestion des
 menus et des statistiques.
 
-## API locale (Neon + Flutter)
 
-The Flutter app needs the Node API in `server/`; a Neon `/rest/v1` URL is a
-database REST endpoint and does not implement the app's `/auth/login` routes.
-The Node server connects to Neon directly and keeps its database URL on the
-server, not in the Flutter bundle.
+##Jalon 1
 
-1. Rotate the Neon database password if it has been shared, then put the new
-   connection URL in `server/.env` as `DATABASE_URL`. Start from
-   `server/.env.example` and set `JWT_SECRET` to a random secret of at least 32
-   characters. `.env` is ignored by git.
-2. From a terminal in `server/`, run:
 
-   ```powershell
-   npm install
-   Copy-Item .env.example .env
-   # Edit .env and set DATABASE_URL and JWT_SECRET before continuing.
-   npm run db:migrate
-   npm run dev
-   ```
-
-3. In another terminal at the project root, run:
-
-   ```powershell
-   flutter pub get
-   flutter run -d chrome
-   ```
-
-   Flutter uses `http://localhost:3000` by default. Check
-   `http://localhost:3000/health` to verify the API and database connection.
-   For Android emulator, pass
-   `--dart-define=API_BASE_URL=http://10.0.2.2:3000`; for a physical device use
-   the computer's LAN IP and allow the origin in `CORS_ORIGINS`.
-
-The API provides signup, login, session restore, menu listing and admin-only
-menu creation/deletion. New accounts are students. To promote an account,
-update its role in Neon SQL Editor:
-
-```sql
-UPDATE app_users SET role = 'admin' WHERE email = 'admin@example.com';
-```
-
-Admin operations require a signed bearer token and the API checks the user's
-current database role. Keep `DATABASE_URL` and `JWT_SECRET` only in server
-environment variables; never pass them to Flutter with `--dart-define`.
 
 # Les Captures d'ecrans 
 
@@ -90,8 +49,45 @@ Mohamed Rayen cherni : Preparer Structure du projet ; filtres et détails des me
 Dhaker ben Lamine : Écran de réservation ; tableau de bord ; écran d’historique et synchronisation avec les autres écrans.
 
 
-# Journal IA 
+# Journal IA
 
 Dhaker ben lamine : https://claude.ai/share/98009013-8343-4ed5-b38c-d5bfd608265a
 
 Mohamed Rayen Cherni : https://chatgpt.com/share/6afb81aa-3bac-83ea-a320-e1af30979d49
+
+
+
+
+## Jalon 2 :
+
+
+# Capture 
+
+
+<img width="490" height="857" alt="Capture d&#39;écran 2026-11-23 212025" src="https://github.com/user-attachments/assets/e99a7278-9354-464e-b23f-6326456f92b2" />
+
+
+<img width="540" height="852" alt="Capture d&#39;écran 2026-11-23 212054" src="https://github.com/user-attachments/assets/f138c540-178d-423b-8c1f-ab935bb7a555" />
+
+
+# Le schéma de navigation 
+Connexion → S'inscrire → Formulaire d'inscription → API /auth/signup → Compte étudiant créé → Connexion
+
+Connexion → Saisir email et mot de passe → API /auth/login → Vérification des identifiants
+
+API /auth/login → Identifiants incorrects → Message d'erreur → Connexion
+
+API /auth/login → Connexion réussie → Enregistrer l'identifiant et le jeton si « Se souvenir de moi » est activé
+
+Connexion réussie → Rôle étudiant → Menus → Réserver → Mon espace → Historique
+
+# Répartition du Travail 
+
+Dhaker Ben Lamine : intégration des menus Flutter avec l’API , écran de connexion et navigation selon le rôle.
+
+Mohamed Rayen Cherni : préparation du serveur et schéma de base de données , routes d’authentification et de menus .
+
+
+# Journal IA
+Dhaker ben lamine : https://claude.ai/share/c1209763-694f-4c43-aac3-a94fd22ed23f
+

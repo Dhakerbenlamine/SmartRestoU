@@ -32,6 +32,10 @@ migrate_working_dir/
 .pub/
 /build/
 /coverage/
+/server/node_modules/
+/server/.env
+/server/.env.*
+!/server/.env.example
 
 # Symbolication related
 app.*.symbols

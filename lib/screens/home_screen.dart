@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:smart_restou/data/menu_items.dart';
 import 'package:smart_restou/models/menu_item.dart';
+import 'package:smart_restou/services/api_service.dart';
+import 'package:smart_restou/services/smart_resto_api.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key, this.onReserve});
+  const HomeScreen({super.key, this.onReserve, this.api});
 
   final VoidCallback? onReserve;
+  final SmartRestoApi? api;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -19,12 +22,45 @@ class _HomeScreenState extends State<HomeScreen> {
 
   String _selectedDiet = _allDiets;
   String _selectedType = _allTypes;
+  late List<MenuItem> _menuItems;
+  bool _isLoading = false;
+  String? _loadError;
 
-  List<MenuItem> get _filteredItems => sampleMenuItems.where((item) {
+  @override
+  void initState() {
+    super.initState();
+    _menuItems = widget.api == null ? sampleMenuItems : const [];
+    if (widget.api != null) _loadMenus();
+  }
+
+  Future<void> _loadMenus() async {
+    setState(() {
+      _isLoading = true;
+      _loadError = null;
+    });
+    try {
+      final items = await widget.api!.getMenus();
+      if (mounted) setState(() => _menuItems = items);
+    } on ApiException catch (error) {
+      if (mounted) setState(() => _loadError = error.message);
+    } on FormatException catch (error) {
+      if (mounted) {
+        setState(
+          () => _loadError = 'Réponse serveur invalide : ${error.message}',
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
+  List<MenuItem> get _filteredItems => _menuItems.where((item) {
     final matchesDiet =
         _selectedDiet == _allDiets || item.diet == _selectedDiet;
     final matchesType =
-        _selectedType == _allTypes || item.type == _selectedType;
+        _selectedType == _allTypes ||
+        item.type == _selectedType ||
+        (_selectedType == 'Menu de la semaine' && item.type == 'Menu semaine');
     return matchesDiet && matchesType;
   }).toList();
 
@@ -119,7 +155,14 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         const SizedBox(height: 24),
-        if (meals.isEmpty)
+        if (_isLoading)
+          const Padding(
+            padding: EdgeInsets.all(32),
+            child: Center(child: CircularProgressIndicator()),
+          )
+        else if (_loadError != null)
+          _MenuLoadError(message: _loadError!, onRetry: _loadMenus)
+        else if (meals.isEmpty)
           const _EmptyMenus()
         else
           for (final meal in meals) ...[
@@ -129,6 +172,25 @@ class _HomeScreenState extends State<HomeScreen> {
       ],
     );
   }
+}
+
+class _MenuLoadError extends StatelessWidget {
+  const _MenuLoadError({required this.message, required this.onRetry});
+
+  final String message;
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: const EdgeInsets.all(24),
+    child: Column(
+      children: [
+        Text(message, textAlign: TextAlign.center),
+        const SizedBox(height: 8),
+        TextButton(onPressed: onRetry, child: const Text('Réessayer')),
+      ],
+    ),
+  );
 }
 
 class _BrandHeader extends StatelessWidget {
